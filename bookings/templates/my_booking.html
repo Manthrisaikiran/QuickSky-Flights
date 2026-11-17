@@ -1,0 +1,36 @@
+
+{% extends 'main.html' %}
+
+{% block content %}
+<h2>My Bookings</h2>
+
+{% for booking in bookings %}
+    <div class="flight-card">
+        <h3>{{ booking.flight.airline }} - {{ booking.flight.flight_number }}</h3>
+
+        <p>
+            {{ booking.flight.source }}
+            → {{ booking.flight.destination }}
+        </p>
+
+        <p>Passenger: {{ booking.passenger_name }}</p>
+        <p>Seat: {{ booking.seat_number }}</p>
+        <p>Price: ₹{{ booking.flight.price }}</p>
+        <p>Booked on: {{ booking.booking_date }}</p>
+
+        
+<p><strong>Status:</strong> {{ booking.status }}</p>
+
+{% if booking.status == 'Confirmed' %}
+    <form method="POST" action="{% url 'cancel_booking' booking.id %}">
+        {% csrf_token %}
+        <button type="submit">Cancel Booking</button>
+    </form>
+{% endif %}
+
+    </div>
+{% empty %}
+    <p>You haven't booked any flights yet.</p>
+{% endfor %}
+
+{% endblock %}

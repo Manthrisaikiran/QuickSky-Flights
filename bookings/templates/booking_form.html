@@ -1,0 +1,46 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="panel">
+        <h2>Book Your Flight</h2>
+
+        <h3>{{ flight.airline }} - {{ flight.flight_number }}</h3>
+
+        <p><strong>Source:</strong> {{ flight.source }}</p>
+        <p><strong>Destination:</strong> {{ flight.destination }}</p>
+        <p><strong>Departure:</strong> {{ flight.departure_time }}</p>
+        <p><strong>Price:</strong> ₹{{ flight.price }}</p>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <label>Passenger Name</label>
+            <input type="text" name="passenger_name" required>
+
+
+            <label>Select Seat:</label>
+
+            <select name="seat_number" required>
+                <option value="">Select a Seat</option>
+            
+                {% for seat in available_seats %}
+                    <option value="{{ seat }}">{{ seat }}</option>
+                {% empty %}
+                    <option value="" disabled>No seats available</option>
+                {% endfor %}
+            </select>
+
+            
+            {% if error %}
+                <p class="error">{{ error }}</p>
+            {% endif %}
+
+
+            <button type="submit">Confirm Booking</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

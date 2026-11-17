@@ -1,0 +1,72 @@
+{% extends 'main.html' %}
+{% block content %}
+<div class="container">
+    <div class="panel">
+        <h1>Welcome to QuickSky Flights</h1>
+        <p>Find your flight and plan your next journey.</p>
+
+        <h2>Search Flights</h2>
+
+        <form method="GET" action="/">
+            <div class="search-form">
+                <div>
+                    <label>From</label>
+                    <input type="text" name="source"
+                           placeholder="Enter source city" required>
+                </div>
+
+                <div>
+                    <label>To</label>
+                    <input type="text" name="destination"
+                           placeholder="Enter destination city" required>
+                </div>
+
+                <div>
+                    <label>Departure Date</label>
+                    <input type="date" name="date" required>
+                </div>
+
+                <div>
+                    <button type="submit">Search Flights</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    {% if request.GET.source %}
+        <h2>Available Flights</h2>
+                
+    {% for flight in flights %}
+        <div class="flight-card">
+            <h3>{{ flight.airline }} - {{ flight.flight_number }}</h3>
+
+        <div class="flight-details">
+            <div>
+                <h4>{{ flight.departure_time|date:"h:i A" }}</h4>
+                <p>{{ flight.source }}</p>
+            </div>
+
+            <div class="duration">
+                <p>{{ flight.duration }}</p>
+                <p>Journey Duration</p>
+            </div>
+
+            <div>
+                <h4>{{ flight.arrival_time|date:"h:i A" }}</h4>
+                <p>{{ flight.destination }}</p>
+            </div>
+        </div>
+
+        <p><strong>Price:</strong> ₹{{ flight.price }}</p>
+
+        <a href="{% url 'book_flight' flight.id %}">
+            <button type="button">Book Now</button>
+        </a>
+    </div>
+    {% empty %}
+        <p>No flights found. Try another route or date.</p>
+    {% endfor %}
+            
+    {% endif %}
+</div> 
+{% endblock %}
