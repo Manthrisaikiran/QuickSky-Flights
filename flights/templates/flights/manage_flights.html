@@ -1,0 +1,64 @@
+
+{% extends 'main.html' %}
+
+{% block content %}
+
+<div class="container">
+
+    <h1>Manage Flights</h1>
+
+    <a href="{% url 'add_flight' %}" class="btn">
+        + Add New Flight
+    </a>
+
+    <table border="1" cellpadding="10" width="100%">
+        <thead>
+            <tr>
+                <th>Flight Number</th>
+                <th>Airline</th>
+                <th>Source</th>
+                <th>Destination</th>
+                <th>Departure</th>
+                <th>Arrival</th>
+                <th>Price</th>
+                <th>Seats</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for flight in flights %}
+            <tr>
+                <td>{{ flight.flight_number }}</td>
+                <td>{{ flight.airline }}</td>
+                <td>{{ flight.source }}</td>
+                <td>{{ flight.destination }}</td>
+                <td>{{ flight.departure_time }}</td>
+                <td>{{ flight.arrival_time }}</td>
+                <td>₹{{ flight.price }}</td>
+                <td>{{ flight.total_seats }}</td>
+
+                <td>
+                    <a href="{% url 'edit_flight' flight.id %}">
+                        Edit
+                    </a>
+
+                    |
+
+                    <a href="{% url 'delete_flight' flight.id %}">
+                        Delete
+                    </a>
+                </td>
+            </tr>
+
+            {% empty %}
+            <tr>
+                <td colspan="9">No flights available.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,34 @@
+
+{% extends 'main.html' %}
+
+{% block content %}
+
+<div class="container delete-container">
+
+    <h2>Delete Flight</h2>
+
+    <p>Are you sure you want to delete this flight?</p>
+
+    <div class="flight-details">
+        <p><strong>Flight Number:</strong> {{ flight.flight_number }}</p>
+        <p><strong>Airline:</strong> {{ flight.airline }}</p>
+        <p><strong>From:</strong> {{ flight.source }}</p>
+        <p><strong>To:</strong> {{ flight.destination }}</p>
+        <p><strong>Price:</strong> ₹{{ flight.price }}</p>
+    </div>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <button type="submit" class="delete-btn">
+            Yes, Delete Flight
+        </button>
+
+        <a href="{% url 'manage_flights' %}" class="cancel-btn">
+            Cancel
+        </a>
+    </form>
+
+</div>
+
+{% endblock %}

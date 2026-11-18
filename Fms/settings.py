@@ -38,7 +38,8 @@ SECRET_KEY = os.environ.get(
     'django-insecure-local-development-only-change-this'
 )
 
-DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
+
+DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
 
 if not DEBUG and not os.environ.get('DJANGO_SECRET_KEY'):
     raise ValueError("DJANGO_SECRET_KEY is required in production")
