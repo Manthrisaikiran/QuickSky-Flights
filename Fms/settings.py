@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'django-insecure-$q9k__r30%-$_wgzco)bt4jo^-94pzyw73eenhw&t8&!aj@3n='
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
@@ -30,31 +30,40 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ALLOWED_HOSTS = []
 
 # Security Settings
+
+
+
 SECRET_KEY = os.environ.get(
     'DJANGO_SECRET_KEY',
     'django-insecure-local-development-only-change-this'
 )
 
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
+
 if not DEBUG and not os.environ.get('DJANGO_SECRET_KEY'):
     raise ValueError("DJANGO_SECRET_KEY is required in production")
 
-ALLOWED_HOSTS = os.environ.get(
-    'ALLOWED_HOSTS', '127.0.0.1,localhost'
-).split(',')
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.environ.get(
+        'ALLOWED_HOSTS', '127.0.0.1,localhost'
+    ).split(',')
+]
 
-# Render hostname
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
-CSRF_TRUSTED_ORIGINS = []
+CSRF_TRUSTED_ORIGINS = [
+    'https://quicksky-flights.onrender.com'
+]
 
 if RENDER_EXTERNAL_HOSTNAME:
     CSRF_TRUSTED_ORIGINS.append(
         f'https://{RENDER_EXTERNAL_HOSTNAME}'
     )
+
 
 
 # Application definition
@@ -106,7 +115,6 @@ WSGI_APPLICATION = 'Fms.wsgi.application'
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
 # Database Configuration
-
 DATABASE_URL = os.environ.get('DATABASE_URL')
 
 if DATABASE_URL:
@@ -117,6 +125,10 @@ if DATABASE_URL:
             conn_health_checks=True
         )
     }
+
+elif not DEBUG:
+    raise ValueError("DATABASE_URL is required in production")
+
 else:
     DATABASES = {
         'default': {
@@ -124,6 +136,7 @@ else:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/6.1/ref/settings/#auth-password-validators
@@ -183,3 +196,20 @@ STORAGES = {
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+    },
+}
