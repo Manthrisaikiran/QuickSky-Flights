@@ -1,3 +1,4 @@
+
 {% extends 'main.html' %}
 
 {% block content %}
@@ -14,17 +15,41 @@
             {% csrf_token %}
 
             <label>Username</label>
-            <input type="text" name="username" required>
+            <input type="text" name="username"
+                   placeholder="saikiran" required>
 
             <label>Password</label>
-            <input type="password" name="password" required>
+            <input type="password" name="password"
+                   placeholder="sai" required>
 
             <button type="submit">Login</button>
         </form>
 
-        <p>Don't have an account?
+        <p>
+            Don't have an account?
             <a href="{% url 'register' %}">Register</a>
         </p>
+
+        <hr>
+
+        <div class="admin-demo">
+            <h3>Admin Demo Credentials</h3>
+
+            <p><strong>Username:</strong>saikiran</p>
+            <p><strong>Password:</strong>sai</p>
+
+            <p>
+                <strong>Admin Features:</strong>
+                Add, edit and delete flights.
+            </p>
+
+            <p>
+                <a href="{% url 'admin:index' %}">
+                    Open Admin Dashboard
+                </a>
+            </p>
+        </div>
+
     </div>
 </div>
 
